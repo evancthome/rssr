@@ -67,7 +67,10 @@ const Account = ({ session }) => {
   }
 
   return (
-    <div className='container flex flex-col items-center justify-center w-3/4 min-h-screen mx-auto'>
+    <div
+      style={{ width: 'max(20vw, 16rem' }}
+      className='fixed w-full h-screen px-8 mx-auto place-self-start grid-span-1 grid-cols-max bg-slate-300'
+    >
       <Avatar
         url={avatar_url}
         onUpload={(url) => {

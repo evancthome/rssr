@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from './supabaseClient'
 import Auth from './Auth'
 import Account from './Account'
+import ViewOwnFeeds from './ViewOwnFeeds'
 
 function App() {
   const [session, setSession] = useState(null)
@@ -16,11 +17,21 @@ function App() {
   }, [])
 
   return (
-    <div className='App bg-slate-100'>
+    <div className='bg-slate-100'>
       {!session ? (
         <Auth />
       ) : (
-        <Account key={session.user.id} session={session} />
+        <>
+          <Account key={session.user.id} session={session} />
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'max(20vw, 16rem) auto',
+            }}
+          >
+            <ViewOwnFeeds session={session} />
+          </div>
+        </>
       )}
     </div>
   )

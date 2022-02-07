@@ -54,17 +54,18 @@ const Avatar = ({ url, onUpload }) => {
   }
 
   return (
-    <div>
+    <div className='flex flex-col justify-center'>
       {avatarUrl ? (
         <img
-          style={{
-            maskImage:
-              'url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjEwMCIgZmlsbC1ydWxlPSJldmVub2RkIi8+PC9zdmc+)',
-            maskSize: 'contain',
-            maskRepeat: 'no-repeat',
-            maskPosition: 'center',
-          }}
-          className='w-24 h-24'
+          // style={{
+          //   WebkitMaskImage:
+          //     'radial-gradient(circle at 50% 60%, black 50%, rgba(0, 0, 0, 0.6) 50%)',
+          //   maskImage: 'linear-gradient(to bottom, transparent 25%, black 75%)',
+          //   maskSize: 'contain',
+          //   maskRepeat: 'no-repeat',
+          //   maskPosition: 'center',
+          // }}
+          className='w-24 h-24 rounded-full'
           src={avatarUrl}
           alt='Avatar'
         />
