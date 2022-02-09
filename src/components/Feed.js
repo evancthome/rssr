@@ -27,7 +27,7 @@ const Feed = ({ feed }) => {
         {viewFeed
           ? feed.rss.rss.channel[0].item
               .slice(0, 11)
-              .map((i) => <FeedItem key={i.title} i={i} />)
+              .map((i) => <FeedItem key={i.title} i={i} displayName={false} />)
           : ''}
       </div>
     </div>

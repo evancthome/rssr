@@ -1,18 +1,52 @@
 import { Link } from 'react-router-dom'
+import FeedItem from './FeedItem'
+import { IoReloadSharp } from 'react-icons/io5'
+import { useEffect, useState } from 'react'
 
-const ViewMostRecent = () => {
+const ViewMostRecent = ({ getFeeds, feeds }) => {
+  const [firstFew, setFirstFew] = useState([])
+
+  useEffect(() => {
+    sortFeeds(feeds)
+  }, [feeds])
+
+  const sortFeeds = (feeds) => {
+    let arr = []
+    feeds.forEach((feed) => {
+      feed.rss.rss.channel[0].item.map((i) => {
+        return (i.name = feed.name)
+      })
+      arr = [...feed.rss.rss.channel[0].item.slice(0, 10), ...arr]
+    })
+    const sorted = arr.sort(
+      (a, b) => new Date(b.pubDate[0]) - new Date(a.pubDate[0]),
+    )
+    setFirstFew(sorted)
+  }
+
   return (
     <div className='w-full min-h-screen col-span-4 col-start-1 px-4 pt-4 md:px-16 md:col-start-2 md:col-span-3'>
-      <div className='grid grid-cols-3'>
-        <h1 className='col-start-2 font-mono text-4xl font-bold text-center place-self-center text-cyan-700'>
+      <div className='flex items-center justify-between mb-6'>
+        <button
+          className='px-4 py-2 mx-2 text-white rounded cursor-pointer bg-slate-600 hover:bg-slate-500'
+          onClick={getFeeds}
+        >
+          <IoReloadSharp size={20} />
+        </button>
+        <h1 className='font-mono text-4xl font-bold text-center text-cyan-700'>
           Most Recent
         </h1>
         <Link
           to='/'
-          className='col-start-3 px-4 py-2 mx-2 text-white rounded cursor-pointer place-self-end bg-slate-600 hover:bg-slate-500'
+          className='px-4 py-2 mx-2 text-white rounded cursor-pointer bg-slate-600 hover:bg-slate-500'
         >
           Back
         </Link>
+      </div>
+      <div>
+        {firstFew.map((i) => (
+          <FeedItem key={i.title} i={i} displayName={true} />
+        ))}
       </div>
     </div>
   )

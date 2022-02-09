@@ -1,53 +1,10 @@
-import React, { useState, useEffect, Suspense } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { supabase } from '../supabaseClient'
-import { parseString } from 'xml2js'
-import Loader from './Loader'
 import AddFeed from './AddFeed'
-const Feed = React.lazy(() => import('./Feed'))
+import Feed from './Feed'
 
-const ViewOwnFeeds = ({ session }) => {
-  const [feeds, setFeeds] = useState([])
-  const [loading, setLoading] = useState(true)
+const ViewOwnFeeds = ({ getFeeds, feeds }) => {
   const [addOpen, setAddOpen] = useState(false)
-
-  const corsProxy = 'https://long-mouse-41.deno.dev/?target='
-
-  useEffect(() => {
-    getFeeds()
-  }, [session])
-
-  const getFeeds = async () => {
-    try {
-      setLoading(true)
-      const user = supabase.auth.user()
-
-      let { data, error, status } = await supabase
-        .from('feeds')
-        .select('*')
-        .eq('user_id', user.id)
-
-      if (error && status !== 406) {
-        throw error
-      }
-
-      if (data) {
-        addParsedFeed(data).then(setFeeds(addParsedFeed))
-      }
-    } catch (error) {
-      alert(error.message)
-    }
-  }
-
-  const addParsedFeed = async (feedArr) => {
-    for (let feed of feedArr) {
-      const data = await fetch(corsProxy + feed.url)
-      const textData = await data.text()
-      parseString(textData, (err, result) => (feed.rss = result))
-    }
-    setFeeds(feedArr)
-    setLoading(false)
-  }
 
   const onToggleAdd = () => {
     setAddOpen(!addOpen)
@@ -76,19 +33,9 @@ const ViewOwnFeeds = ({ session }) => {
         <AddFeed getFeeds={getFeeds} setAddOpen={setAddOpen} />
       </div>
       <div>
-        {!loading ? (
-          feeds.map((feed) => (
-            <Suspense key={feed.id} fallback={<Loader />}>
-              <div>
-                <Feed feed={feed} />
-              </div>
-            </Suspense>
-          ))
-        ) : (
-          <span className='flex items-center justify-center'>
-            <Loader />
-          </span>
-        )}
+        {feeds.map((feed) => (
+          <Feed key={feed.id} feed={feed} />
+        ))}
       </div>
     </div>
   )
