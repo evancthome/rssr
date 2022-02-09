@@ -1,9 +1,11 @@
 import './App.css'
 import { useState, useEffect } from 'react'
+import { Routes, Route } from 'react-router-dom'
 import { supabase } from './supabaseClient'
-import Auth from './Auth'
-import Account from './Account'
-import ViewOwnFeeds from './ViewOwnFeeds'
+import Auth from './components/Auth'
+import Account from './components/Account'
+import ViewOwnFeeds from './components/ViewOwnFeeds'
+import ViewMostRecent from './components/ViewMostRecent'
 
 function App() {
   const [session, setSession] = useState(null)
@@ -29,7 +31,10 @@ function App() {
               gridTemplateColumns: 'max(20vw, 16rem) auto',
             }}
           >
-            <ViewOwnFeeds session={session} />
+            <Routes>
+              <Route path='/' element={<ViewOwnFeeds session={session} />} />
+              <Route path='/recent' element={<ViewMostRecent />} />
+            </Routes>
           </div>
         </>
       )}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Suspense } from 'react'
-import { supabase } from './supabaseClient'
+import { Link } from 'react-router-dom'
+import { supabase } from '../supabaseClient'
 import { parseString } from 'xml2js'
 import Loader from './Loader'
 import AddFeed from './AddFeed'
@@ -57,16 +58,19 @@ const ViewOwnFeeds = ({ session }) => {
       <div className='flex items-center justify-between mb-6'>
         <button
           onClick={onToggleAdd}
-          className='inline px-4 py-2 mx-2 text-white rounded cursor-pointer bg-slate-600 hover:bg-slate-500'
+          className='px-4 py-2 mx-2 text-white rounded cursor-pointer bg-slate-600 hover:bg-slate-500'
         >
           Add Feed
         </button>
         <h1 className='font-mono text-4xl font-bold text-center text-cyan-700'>
           Feeds
         </h1>
-        <button className='inline px-4 py-2 mx-2 text-white rounded cursor-pointer bg-slate-600 hover:bg-slate-500'>
+        <Link
+          to='/recent'
+          className='px-4 py-2 mx-2 text-white rounded cursor-pointer bg-slate-600 hover:bg-slate-500'
+        >
           View Most Recent
-        </button>
+        </Link>
       </div>
       <div className={addOpen ? 'flex justify-center' : 'hidden'}>
         <AddFeed getFeeds={getFeeds} setAddOpen={setAddOpen} />

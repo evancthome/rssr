@@ -11,7 +11,7 @@ const Feed = ({ feed }) => {
   }
   return (
     <div className='container px-4 py-2 mx-auto mb-4 rounded shadow bg-slate-700'>
-      <div className='flex justify-betwen'>
+      <div className='flex justify-between'>
         <h1 className='inline-block my-2 text-lg font-bold text-white'>
           {feed.name}
         </h1>
