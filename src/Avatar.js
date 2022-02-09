@@ -54,7 +54,7 @@ const Avatar = ({ url, onUpload }) => {
   }
 
   return (
-    <div className='flex flex-col justify-center'>
+    <div className='flex flex-col justify-center align-items-center'>
       {avatarUrl ? (
         <img
           // style={{
@@ -65,7 +65,7 @@ const Avatar = ({ url, onUpload }) => {
           //   maskRepeat: 'no-repeat',
           //   maskPosition: 'center',
           // }}
-          className='w-24 h-24 rounded-full'
+          className='self-center w-24 h-24 rounded-full'
           src={avatarUrl}
           alt='Avatar'
         />

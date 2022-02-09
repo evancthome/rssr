@@ -1,11 +1,14 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import { supabase } from './supabaseClient'
 import { parseString } from 'xml2js'
-import Feed from './Feed'
+import Loader from './Loader'
+import AddFeed from './AddFeed'
+const Feed = React.lazy(() => import('./Feed'))
 
 const ViewOwnFeeds = ({ session }) => {
   const [feeds, setFeeds] = useState([])
   const [loading, setLoading] = useState(true)
+  const [addOpen, setAddOpen] = useState(false)
 
   const corsProxy = 'https://long-mouse-41.deno.dev/?target='
 
@@ -22,7 +25,6 @@ const ViewOwnFeeds = ({ session }) => {
         .from('feeds')
         .select('*')
         .eq('user_id', user.id)
-      // .limit(2)
 
       if (error && status !== 406) {
         throw error
@@ -36,42 +38,53 @@ const ViewOwnFeeds = ({ session }) => {
     }
   }
 
-  // const parseFeed = async (url) => {
-  //   const encodedUrl = encodeURI(url)
-  //   const data = await fetch(corsProxy + encodedUrl)
-  //   const dataToText = data.text()
-  //   const parsed = new window.DOMParser().parseFromString(
-  //     dataToText,
-  //     'text/xml',
-  //   )
-
-  //   return parsed.item
-  // }
-
   const addParsedFeed = async (feedArr) => {
     for (let feed of feedArr) {
       const data = await fetch(corsProxy + feed.url)
       const textData = await data.text()
       parseString(textData, (err, result) => (feed.rss = result))
-      // feed.rss = parsed
-      // const parsed = new DOMParser().parseFromString(textData, 'text/xml')
-      // feed.rss = parsed.querySelector('channel')
     }
     setFeeds(feedArr)
     setLoading(false)
   }
 
+  const onToggleAdd = () => {
+    setAddOpen(!addOpen)
+  }
+
   return (
-    <div className='w-full min-h-screen col-span-3 col-start-2 px-16 pt-4'>
-      <h1 className='mb-6 text-4xl font-bold text-center'>Feeds</h1>
+    <div className='w-full min-h-screen col-span-4 col-start-1 px-4 pt-4 md:px-16 md:col-start-2 md:col-span-3'>
+      <div className='flex items-center justify-between mb-6'>
+        <button
+          onClick={onToggleAdd}
+          className='inline px-4 py-2 mx-2 text-white rounded cursor-pointer bg-slate-600 hover:bg-slate-500'
+        >
+          Add Feed
+        </button>
+        <h1 className='font-mono text-4xl font-bold text-center text-cyan-700'>
+          Feeds
+        </h1>
+        <button className='inline px-4 py-2 mx-2 text-white rounded cursor-pointer bg-slate-600 hover:bg-slate-500'>
+          View Most Recent
+        </button>
+      </div>
+      <div className={addOpen ? 'flex justify-center' : 'hidden'}>
+        <AddFeed getFeeds={getFeeds} setAddOpen={setAddOpen} />
+      </div>
       <div>
-        {!loading
-          ? feeds.map((feed) => (
-              <div key={feed.id}>
+        {!loading ? (
+          feeds.map((feed) => (
+            <Suspense key={feed.id} fallback={<Loader />}>
+              <div>
                 <Feed feed={feed} />
               </div>
-            ))
-          : 'none to display'}
+            </Suspense>
+          ))
+        ) : (
+          <span className='flex items-center justify-center'>
+            <Loader />
+          </span>
+        )}
       </div>
     </div>
   )
