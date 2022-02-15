@@ -7,6 +7,7 @@ import Loader from './components/Loader'
 import Auth from './components/Auth'
 import Account from './components/Account'
 import ViewMostRecent from './components/ViewMostRecent'
+import ViewFeed from './components/ViewFeed'
 const ViewOwnFeeds = React.lazy(() => import('./components/ViewOwnFeeds'))
 
 function App() {
@@ -22,7 +23,9 @@ function App() {
       setSession(session)
     })
 
-    session ?? getFeeds()
+    if (session) {
+      getFeeds()
+    }
   }, [session])
 
   const getFeeds = async () => {
@@ -39,7 +42,7 @@ function App() {
       }
 
       if (data) {
-        addParsedFeed(data).then(setFeeds(addParsedFeed))
+        addParsedFeed(data).then((p) => setFeeds(p))
       }
     } catch (error) {
       alert(error.message)
@@ -52,7 +55,7 @@ function App() {
       const textData = await data.text()
       parseString(textData, (err, result) => (feed.rss = result))
     }
-    setFeeds(feedArr)
+    return feedArr
   }
 
   return (
@@ -83,6 +86,17 @@ function App() {
                 element={
                   <Suspense fallback={<Loader />}>
                     <ViewMostRecent getFeeds={getFeeds} feeds={feeds} />
+                  </Suspense>
+                }
+              />
+              <Route
+                path='/feeds/:id'
+                element={
+                  <Suspense fallback={<Loader />}>
+                    <ViewFeed
+                      addParsedFeed={addParsedFeed}
+                      getFeeds={getFeeds}
+                    />
                   </Suspense>
                 }
               />

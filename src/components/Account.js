@@ -75,7 +75,7 @@ const Account = ({ session }) => {
   return (
     <div
       style={{ width: 'max(20vw, 16rem' }}
-      className='fixed w-full h-screen px-4 pt-4 mx-auto -left-full md:left-0 place-self-start grid-span-1 grid-cols-max bg-slate-300'
+      className='fixed w-full h-screen px-4 pt-4 mx-auto sidebar md:left-0 place-self-start grid-span-1 grid-cols-max bg-slate-300'
     >
       <h1 className='relative mb-6 font-mono text-6xl font-bold text-center underline text-cyan-700'>
         RSSr
@@ -87,7 +87,9 @@ const Account = ({ session }) => {
           updateProfile({ username, website, avatar_url: url })
         }}
       />
-      <div className={updateProfileSettings ? 'hidden mt-2' : 'mt-2'}>
+      <div
+        className={updateProfileSettings ? 'hidden mt-2' : 'mt-2 text-center'}
+      >
         <p className='pb-2 font-semibold'>{username}</p>
         <p className='pb-2 font-semibold'>{session.user.email}</p>
         <p className='pb-2 font-semibold'>{website}</p>

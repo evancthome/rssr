@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^13.5.0",
     "buffer": "^6.0.3",
     "dompurify": "^2.3.5",
+    "hamburger-react": "^2.4.1",
     "he": "^1.2.0",
     "html-react-parser": "^1.4.8",
     "react": "^17.0.2",

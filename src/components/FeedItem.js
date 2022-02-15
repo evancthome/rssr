@@ -7,7 +7,7 @@ import 'react-h5-audio-player/lib/styles.css'
 import parse from 'html-react-parser'
 import DOMPurify from 'dompurify'
 
-const FeedItem = ({ i, displayName }) => {
+const FeedItem = ({ i, displayName, name }) => {
   const [viewDes, setViewDes] = useState(false)
 
   const onClick = () => {
@@ -17,6 +17,7 @@ const FeedItem = ({ i, displayName }) => {
   const html = (html) => {
     return parse(DOMPurify.sanitize(html))
   }
+
   return (
     <div className='px-4 py-2 mb-4 rounded shadow bg-slate-300'>
       <a
@@ -29,11 +30,12 @@ const FeedItem = ({ i, displayName }) => {
       </a>
       <div className='flex justify-between'>
         <p className='font-semibold'>
-          Published {displayName ? `by ${i.name}` : ''} on{' '}
+          Published {name ? `by ${name}` : ''}{' '}
+          {displayName ? `by ${i.name}` : ''} on{' '}
           {new Date(i.pubDate).toDateString()}
         </p>
         <button onClick={onClick}>
-          {viewDes ? <IoIosArrowDown size={25} /> : <IoIosArrowUp size={25} />}
+          {!viewDes ? <IoIosArrowDown size={25} /> : <IoIosArrowUp size={25} />}
         </button>
       </div>
 

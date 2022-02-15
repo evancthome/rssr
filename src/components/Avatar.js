@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../supabaseClient'
+import defaultAvi from '../defaultAvi.png'
 
 const Avatar = ({ url, onUpload }) => {
   const [avatarUrl, setAvatarUrl] = useState()
@@ -57,37 +58,32 @@ const Avatar = ({ url, onUpload }) => {
     <div className='flex flex-col justify-center align-items-center'>
       {avatarUrl ? (
         <img
-          // style={{
-          //   WebkitMaskImage:
-          //     'radial-gradient(circle at 50% 60%, black 50%, rgba(0, 0, 0, 0.6) 50%)',
-          //   maskImage: 'linear-gradient(to bottom, transparent 25%, black 75%)',
-          //   maskSize: 'contain',
-          //   maskRepeat: 'no-repeat',
-          //   maskPosition: 'center',
-          // }}
           className='self-center w-24 h-24 rounded-full'
           src={avatarUrl}
           alt='Avatar'
         />
       ) : (
-        <div>No avatar</div>
-      )}
-      <div className='mt-6 mb-2'>
-        <label
-          className='px-4 py-2 text-white rounded cursor-pointer bg-slate-600 hover:bg-slate-500'
-          htmlFor='single'
-        >
-          {uploading ? 'Uploading' : 'Upload'}
-        </label>
-        <input
-          type='file'
-          className='absolute invisible'
-          id='single'
-          accept='image/*'
-          onChange={uploadAvatar}
-          disabled={uploading}
+        <img
+          className='self-center w-24 h-24 rounded-full'
+          src={defaultAvi}
+          alt='Default Avatar'
         />
-      </div>
+      )}
+      <label
+        className='absolute self-center w-24 h-24 px-4 py-8 text-center text-transparent transition-all bg-transparent rounded-full cursor-pointer hover:text-white hover:bg-slate-600/75'
+        htmlFor='single'
+      >
+        {uploading ? 'Uploading' : 'Upload'}
+      </label>
+      <input
+        type='file'
+        className='absolute invisible'
+        id='single'
+        accept='image/*'
+        onChange={uploadAvatar}
+        disabled={uploading}
+      />
+      {/* </div> */}
     </div>
   )
 }

@@ -1,29 +1,41 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { supabase } from '../supabaseClient'
 
-const AddFeed = ({ getFeeds, setAddOpen }) => {
-  const [title, setTitle] = useState(null)
-  const [link, setLink] = useState(null)
+const UpdateFeed = ({ getFeeds, getFeed, feed, id, setUpdateOpen }) => {
+  const [title, setTitle] = useState('')
+  const [link, setLink] = useState('')
   const [isPublic, setIsPublic] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const addFeed = async () => {
+  useEffect(() => {
+    setFeed()
+  }, [feed])
+
+  const setFeed = () => {
+    setTitle(feed.name)
+    setLink(feed.url)
+    setIsPublic(feed.public)
+  }
+
+  const updateFeed = async () => {
     try {
       setLoading(true)
-      const user = supabase.auth.user()
 
-      const fields = [
+      const updates = [
         {
-          user_id: user.id,
+          id: id,
           name: title,
           url: link,
           public: isPublic,
         },
       ]
 
-      let { error } = await supabase.from('feeds').insert(fields, {
-        returning: 'minimal',
-      })
+      let { error } = await supabase
+        .from('feeds')
+        .update(updates, {
+          returning: 'minimal',
+        })
+        .eq('id', id)
 
       if (error) {
         throw error
@@ -32,17 +44,15 @@ const AddFeed = ({ getFeeds, setAddOpen }) => {
       alert(error.message)
     } finally {
       setLoading(false)
-      setAddOpen(false)
-      setTitle('')
-      setLink('')
-      setIsPublic(false)
+      setUpdateOpen(false)
+      getFeed(id)
       getFeeds()
     }
   }
 
   return (
-    <div className='flex flex-col items-center w-5/6 p-4 mx-auto mb-4 rounded shadow md:w-1/2 bg-slate-300'>
-      <h3 className='mb-2 text-lg font-bold text-center'>Add Feed</h3>
+    <div className='flex flex-col items-center w-1/2 p-4 mx-auto mb-4 rounded shadow bg-slate-300'>
+      <h3 className='mb-2 text-lg font-bold text-center'>Update Feed</h3>
       <div className='mb-2'>
         <label className='font-semibold' htmlFor='Name'>
           Name
@@ -70,21 +80,21 @@ const AddFeed = ({ getFeeds, setAddOpen }) => {
         <input
           className='ml-4'
           type='checkbox'
-          checked={isPublic}
+          checked={!!isPublic}
           onChange={(e) => setIsPublic(e.target.checked)}
         />
       </div>
       <div>
         <button
           className='px-4 py-2 mx-2 text-white rounded cursor-pointer bg-slate-700 hover:bg-slate-600'
-          onClick={addFeed}
+          onClick={updateFeed}
           disabled={loading}
         >
-          Add Feed
+          Update Feed
         </button>
       </div>
     </div>
   )
 }
 
-export default AddFeed
+export default UpdateFeed
