@@ -3,7 +3,7 @@ import FeedItem from './FeedItem'
 import { IoReloadSharp } from 'react-icons/io5'
 import { useEffect, useState } from 'react'
 
-const ViewMostRecent = ({ getFeeds, feeds }) => {
+const ViewMostRecent = ({ accountOpen, getFeeds, feeds }) => {
   const [firstFew, setFirstFew] = useState([])
 
   useEffect(() => {
@@ -25,7 +25,13 @@ const ViewMostRecent = ({ getFeeds, feeds }) => {
   }
 
   return (
-    <div className='w-full min-h-screen col-span-4 col-start-1 px-4 pt-4 md:px-16 md:col-start-2 md:col-span-3'>
+    <div
+      className={
+        !accountOpen
+          ? 'w-full min-h-screen col-span-3 row-start-2 md:row-start-1 col-start-1 px-4 pt-4 md:px-16'
+          : 'w-full min-h-screen col-span-3 row-start-2 md:row-start-1 col-start-2 px-4 pt-4 md:px-16'
+      }
+    >
       <div className='flex items-center justify-between mb-6'>
         <button
           className='px-4 py-2 mx-2 text-white rounded cursor-pointer bg-slate-600 hover:bg-slate-500'
@@ -44,8 +50,8 @@ const ViewMostRecent = ({ getFeeds, feeds }) => {
         </Link>
       </div>
       <div>
-        {firstFew.map((i) => (
-          <FeedItem key={i.title} i={i} displayName={true} />
+        {firstFew.map((i, j) => (
+          <FeedItem key={j} i={i} displayName={true} />
         ))}
       </div>
     </div>

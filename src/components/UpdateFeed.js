@@ -51,7 +51,7 @@ const UpdateFeed = ({ getFeeds, getFeed, feed, id, setUpdateOpen }) => {
   }
 
   return (
-    <div className='flex flex-col items-center w-1/2 p-4 mx-auto mb-4 rounded shadow bg-slate-300'>
+    <div className='flex flex-col items-center w-full p-4 mx-auto mb-4 rounded shadow sm:w-1/2 bg-slate-300'>
       <h3 className='mb-2 text-lg font-bold text-center'>Update Feed</h3>
       <div className='mb-2'>
         <label className='font-semibold' htmlFor='Name'>

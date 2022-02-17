@@ -9,7 +9,7 @@ import Confirmation from './Confirmation'
 import UpdateFeed from './UpdateFeed'
 import { supabase } from '../supabaseClient'
 
-const ViewFeed = ({ getFeeds, addParsedFeed }) => {
+const ViewFeed = ({ accountOpen, getFeeds, addParsedFeed }) => {
   const [feed, setFeed] = useState([])
   const [updateOpen, setUpdateOpen] = useState(false)
   const [loading, setLoading] = useState()
@@ -77,7 +77,13 @@ const ViewFeed = ({ getFeeds, addParsedFeed }) => {
   }
 
   return (
-    <div className='w-full min-h-screen col-span-4 col-start-1 px-4 pt-4 md:px-16 md:col-start-2 md:col-span-3'>
+    <div
+      className={
+        !accountOpen
+          ? 'w-full min-h-screen row-start-1 overflow-y-hidden col-span-3 col-start-1 px-4 pt-4 md:px-16  '
+          : 'w-full min-h-screen row-start-1 overflow-y-hidden col-span-3 px-4 pt-4 md:px-16 col-start-2 '
+      }
+    >
       {showConfirm ? (
         <Confirmation
           body={`Do you really want to delete ${feed.name} from your feed list?`}
@@ -88,12 +94,12 @@ const ViewFeed = ({ getFeeds, addParsedFeed }) => {
           toggleF={toggleConfirm}
         />
       ) : null}
-      <div className='flex items-center justify-between mb-6'>
+      <div className='grid grid-cols-3 grid-rows-2 mb-6 sm:grid-rows-1 gap-y-4 place-items-end'>
         <IconContext.Provider
           value={loading ? { className: 'animate-spin' } : ''}
         >
           <button
-            className='px-4 py-2 mx-2 text-white rounded cursor-pointer bg-slate-600 hover:bg-slate-500'
+            className='px-4 py-2 mx-2 text-white rounded cursor-pointer w-min bg-slate-600 hover:bg-slate-500'
             onClick={() => {
               getFeed(params.id)
             }}
@@ -101,10 +107,10 @@ const ViewFeed = ({ getFeeds, addParsedFeed }) => {
             {<IoReloadSharp size={20} />}
           </button>
         </IconContext.Provider>
-        <div className='grid grid-cols-3 place-items-center'>
+        <div className='grid grid-cols-3 col-span-4 col-start-1 row-start-2 sm:row-start-1 sm:col-start-2 sm:place-self-start place-self-center place-items-center'>
           <button
             onClick={toggleUpdate}
-            className='px-4 py-2 text-white rounded cursor-pointer bg-slate-600 hover:bg-slate-500 w-max h-min'
+            className='px-4 py-2 text-white rounded cursor-pointer w-max bg-slate-600 hover:bg-slate-500 h-min'
           >
             Update Info
           </button>
@@ -120,7 +126,7 @@ const ViewFeed = ({ getFeeds, addParsedFeed }) => {
         </div>
         <Link
           to='/'
-          className='px-4 py-2 mx-2 text-white rounded cursor-pointer bg-slate-600 hover:bg-slate-500'
+          className='col-start-3 row-start-1 px-4 py-2 mx-2 text-white rounded cursor-pointer place-self-end w-min bg-slate-600 hover:bg-slate-500'
         >
           Back
         </Link>

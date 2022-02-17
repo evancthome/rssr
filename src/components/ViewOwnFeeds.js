@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import AddFeed from './AddFeed'
 import Feed from './Feed'
 
-const ViewOwnFeeds = ({ getFeeds, feeds }) => {
+const ViewOwnFeeds = ({ accountOpen, getFeeds, feeds }) => {
   const [addOpen, setAddOpen] = useState(false)
 
   const onToggleAdd = () => {
@@ -11,8 +11,14 @@ const ViewOwnFeeds = ({ getFeeds, feeds }) => {
   }
 
   return (
-    <div className='w-full min-h-screen col-span-4 col-start-1 px-4 pt-4 main md:px-16 md:col-start-2 md:col-span-3'>
-      <div className='flex items-center justify-between mb-6'>
+    <div
+      className={
+        !accountOpen
+          ? 'w-full min-h-screen col-span-3 col-start-1 md:row-start-1 row-start-2 px-4 pt-4 main md:px-16'
+          : 'w-full min-h-screen col-span-3 col-start-2 md:row-start-1 row-start-2 overflow-hidden px-4 pt-4 main md:px-16'
+      }
+    >
+      <div className='container flex items-center justify-between mx-auto mb-6'>
         <button
           onClick={onToggleAdd}
           className={

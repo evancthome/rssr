@@ -3,16 +3,18 @@ import React, { Suspense, useState, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { supabase } from './supabaseClient'
 import { parseString } from 'xml2js'
+import { Squash as Hamburger } from 'hamburger-react'
 import Loader from './components/Loader'
 import Auth from './components/Auth'
 import Account from './components/Account'
-import ViewMostRecent from './components/ViewMostRecent'
-import ViewFeed from './components/ViewFeed'
+const ViewMostRecent = React.lazy(() => import('./components/ViewMostRecent'))
+const ViewFeed = React.lazy(() => import('./components/ViewFeed'))
 const ViewOwnFeeds = React.lazy(() => import('./components/ViewOwnFeeds'))
 
 function App() {
   const [session, setSession] = useState(null)
   const [feeds, setFeeds] = useState([])
+  const [accountOpen, setAccountOpen] = useState(false)
 
   const corsProxy = 'https://long-mouse-41.deno.dev/?target='
 
@@ -64,19 +66,28 @@ function App() {
         <Auth />
       ) : (
         <>
-          <Account key={session.user.id} session={session} />
+          <div className={!accountOpen ? 'hidden' : null}>
+            <Account key={session.user.id} session={session} />
+          </div>
           <div
             style={{
               display: 'grid',
               gridTemplateColumns: 'max(20vw, 16rem) auto',
             }}
           >
+            <div className='inline col-start-1 row-start-1'>
+              <Hamburger toggled={accountOpen} toggle={setAccountOpen} />
+            </div>
             <Routes>
               <Route
                 path='/'
                 element={
                   <Suspense fallback={<Loader />}>
-                    <ViewOwnFeeds getFeeds={getFeeds} feeds={feeds} />
+                    <ViewOwnFeeds
+                      accountOpen={accountOpen}
+                      getFeeds={getFeeds}
+                      feeds={feeds}
+                    />
                   </Suspense>
                 }
               />
@@ -85,7 +96,11 @@ function App() {
                 path='/recent'
                 element={
                   <Suspense fallback={<Loader />}>
-                    <ViewMostRecent getFeeds={getFeeds} feeds={feeds} />
+                    <ViewMostRecent
+                      accountOpen={accountOpen}
+                      getFeeds={getFeeds}
+                      feeds={feeds}
+                    />
                   </Suspense>
                 }
               />
@@ -94,6 +109,7 @@ function App() {
                 element={
                   <Suspense fallback={<Loader />}>
                     <ViewFeed
+                      accountOpen={accountOpen}
                       addParsedFeed={addParsedFeed}
                       getFeeds={getFeeds}
                     />
