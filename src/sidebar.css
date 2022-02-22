@@ -1,0 +1,106 @@
+:root {
+  --clr-neutral-100: #f8f7f9;
+  --clr-neutral-300: #e2e2e2;
+  --clr-neutral-600: #605f5e;
+  --clr-neutral-900: #001011;
+
+  --clr-primary-300: #247ba0;
+  --clr-primary-600: #0a2463;
+
+  --clr-accent-600: #fb3640;
+}
+
+/* Position and sizing of burger button */
+.bm-burger-button {
+  position: fixed;
+  width: 36px;
+  height: 30px;
+  left: 36px;
+  top: 36px;
+}
+
+/* Color/shape of burger icon bars */
+.bm-burger-bars {
+  background: var(--clr-primary-600);
+}
+
+/* Color/shape of burger icon bars on hover*/
+.bm-burger-bars-hover {
+  background: var(--clr-primary-300);
+}
+
+/* Position and sizing of clickable cross button */
+.bm-cross-button {
+  height: 24px;
+  width: 24px;
+}
+
+/* Color/shape of close button cross */
+.bm-cross {
+  background: var(--clr-neutral-100);
+}
+
+/*
+Sidebar wrapper styles
+Note: Beware of modifying this element as it can break the animations - you should not need to touch it in most cases
+*/
+.bm-menu-wrap {
+  position: fixed;
+  height: 100%;
+}
+
+/* General sidebar styles */
+.bm-menu {
+  overflow: hidden !important;
+  background: var(--clr-primary-300);
+  padding: 0 1.5em 0;
+  font-size: 1.15rem;
+  text-align: center;
+}
+
+/* Wrapper for item list */
+.bm-item-list {
+  color: #b8b7ad;
+  padding: 0.8em;
+}
+
+/* Individual item */
+.bm-item {
+  width: 100%;
+  display: inline-block;
+  color: var(--clr-neutral-100);
+  text-decoration: none;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+h2.bm-item {
+  margin-top: 0;
+  font-size: 2rem;
+}
+
+.bm-item.username {
+  font-size: 2rem;
+  margin-top: 0;
+  border-bottom: 2px var(--clr-primary-600) solid;
+  padding: 0.2rem;
+}
+
+a.bm-item,
+button.bm-item {
+  cursor: pointer;
+  transition: transforom 250ms ease-in-out;
+}
+
+a.bm-item:hover,
+button.bm-item:hover {
+  cursor: pointer;
+  transform: scale(1.03);
+}
+
+/* Styling of overlay */
+.bm-overlay {
+  background: rgba(0, 0, 0, 0.3);
+}

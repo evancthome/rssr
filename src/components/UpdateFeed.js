@@ -51,14 +51,14 @@ const UpdateFeed = ({ getFeeds, getFeed, feed, id, setUpdateOpen }) => {
   }
 
   return (
-    <div className='flex flex-col items-center w-full p-4 mx-auto mb-4 rounded shadow sm:w-1/2 bg-slate-300'>
-      <h3 className='mb-2 text-lg font-bold text-center'>Update Feed</h3>
-      <div className='mb-2'>
+    <div className='feed-form'>
+      {/* <h3 className='mb-2 text-lg font-bold text-center'>Update Feed</h3> */}
+      <div>
         <label className='font-semibold' htmlFor='Name'>
           Name
         </label>
         <input
-          className='w-full rounded'
+          className='input'
           type='text'
           value={title || ''}
           onChange={(e) => setTitle(e.target.value)}
@@ -69,13 +69,13 @@ const UpdateFeed = ({ getFeeds, getFeed, feed, id, setUpdateOpen }) => {
           Link
         </label>
         <input
-          className='w-full rounded'
+          className='input'
           type='text'
           value={link || ''}
           onChange={(e) => setLink(e.target.value)}
         />
       </div>
-      <div className='mb-2'>
+      {/* <div className='mb-2'>
         <label htmlFor='Name'>Is this a public feed?</label>
         <input
           className='ml-4'
@@ -83,14 +83,17 @@ const UpdateFeed = ({ getFeeds, getFeed, feed, id, setUpdateOpen }) => {
           checked={!!isPublic}
           onChange={(e) => setIsPublic(e.target.checked)}
         />
-      </div>
-      <div>
+      </div> */}
+      <div className='split'>
+        <button className='btn' onClick={updateFeed} disabled={loading}>
+          Update
+        </button>
         <button
-          className='px-4 py-2 mx-2 text-white rounded cursor-pointer bg-slate-700 hover:bg-slate-600'
-          onClick={updateFeed}
+          className='btn'
+          onClick={() => setUpdateOpen(false)}
           disabled={loading}
         >
-          Update Feed
+          Cancel
         </button>
       </div>
     </div>

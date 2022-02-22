@@ -55,7 +55,7 @@ const Avatar = ({ url, onUpload }) => {
   }
 
   return (
-    <div className='flex flex-col justify-center align-items-center'>
+    <div className='flex flex-col justify-center avatar align-items-center'>
       {avatarUrl ? (
         <img
           className='self-center w-24 h-24 rounded-full'

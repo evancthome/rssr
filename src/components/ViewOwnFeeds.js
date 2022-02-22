@@ -2,48 +2,64 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import AddFeed from './AddFeed'
 import Feed from './Feed'
+import Avatar from './Avatar'
+import Account from './Account'
+import { slide as Menu } from 'react-burger-menu'
 
-const ViewOwnFeeds = ({ accountOpen, getFeeds, feeds }) => {
+const ViewOwnFeeds = ({ session, username, avatar, getFeeds, feeds }) => {
   const [addOpen, setAddOpen] = useState(false)
+  const [showAccount, setShowAccount] = useState(false)
 
   const onToggleAdd = () => {
     setAddOpen(!addOpen)
   }
 
+  const onToggleAccount = () => {
+    setShowAccount(!showAccount)
+  }
+
   return (
-    <div
-      className={
-        !accountOpen
-          ? 'w-full min-h-screen col-span-3 col-start-1 md:row-start-1 row-start-2 px-4 pt-4 main md:px-16'
-          : 'w-full min-h-screen col-span-3 col-start-2 md:row-start-1 row-start-2 overflow-hidden px-4 pt-4 main md:px-16'
-      }
-    >
-      <div className='container flex items-center justify-between mx-auto mb-6'>
-        <button
-          onClick={onToggleAdd}
-          className={
-            'px-4 py-2 mx-2 text-white rounded cursor-pointer bg-slate-600 hover:bg-slate-500'
-          }
-        >
-          {addOpen ? 'Close' : 'Add Feed'}
-        </button>
-        <h1 className='font-mono text-4xl font-bold text-center text-cyan-700'>
-          Feeds
-        </h1>
-        <Link
-          to='/recent'
-          className='px-4 py-2 mx-2 text-white rounded cursor-pointer bg-slate-600 hover:bg-slate-700'
-        >
+    <div>
+      <Menu>
+        <h2>RSSr</h2>
+        <Avatar url={avatar} />
+        <p className='username'>{username}</p>
+        {/* <a href='#'>Test</a> */}
+
+        <Link to='/recent' className='menu-item'>
           Most Recent
         </Link>
-      </div>
-      <div className={addOpen ? 'flex justify-center' : 'hidden'}>
-        <AddFeed getFeeds={getFeeds} setAddOpen={setAddOpen} />
-      </div>
-      <div>
-        {feeds.map((feed) => (
-          <Feed key={feed.id} feed={feed} />
-        ))}
+        <button onClick={onToggleAccount}>View Account</button>
+        {!addOpen ? (
+          <button onClick={onToggleAdd} className={'menu-item'}>
+            Add Feed
+          </button>
+        ) : null}
+        {addOpen ? (
+          <div>
+            <AddFeed getFeeds={getFeeds} setAddOpen={setAddOpen} />
+          </div>
+        ) : null}
+      </Menu>
+      {showAccount ? (
+        <Account setShowAccount={setShowAccount} session={session} />
+      ) : null}
+      <div className='container'>
+        <div>
+          <h1 className='font-mono text-4xl font-bold text-center text-cyan-700'>
+            Feeds
+          </h1>
+        </div>
+        {/* {addOpen ? (
+          <div>
+            <AddFeed getFeeds={getFeeds} setAddOpen={setAddOpen} />
+          </div>
+        ) : null} */}
+        <div className='feed-grid'>
+          {feeds.map((feed) => (
+            <Feed key={feed.id} feed={feed} />
+          ))}
+        </div>
       </div>
     </div>
   )

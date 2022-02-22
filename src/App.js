@@ -1,3 +1,5 @@
+import './reset.css'
+import './sidebar.css'
 import './App.css'
 import React, { Suspense, useState, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
@@ -15,6 +17,10 @@ function App() {
   const [session, setSession] = useState(null)
   const [feeds, setFeeds] = useState([])
   const [accountOpen, setAccountOpen] = useState(false)
+  const [username, setUsername] = useState(null)
+  const [website, setWebsite] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [avatar_url, setAvatarUrl] = useState(null)
 
   const corsProxy = 'https://long-mouse-41.deno.dev/?target='
 
@@ -25,10 +31,39 @@ function App() {
       setSession(session)
     })
 
+    getProfile()
+
     if (session) {
       getFeeds()
     }
   }, [session])
+
+  const getProfile = async () => {
+    try {
+      setLoading(true)
+      const user = supabase.auth.user()
+
+      let { data, error, status } = await supabase
+        .from('profiles')
+        .select('username, website, avatar_url')
+        .eq('id', user.id)
+        .single()
+
+      if (error && status !== 406) {
+        throw error
+      }
+
+      if (data) {
+        setUsername(data.username)
+        setWebsite(data.website)
+        setAvatarUrl(data.avatar_url)
+      }
+    } catch (error) {
+      alert(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const getFeeds = async () => {
     try {
@@ -61,29 +96,27 @@ function App() {
   }
 
   return (
-    <div className='bg-slate-100'>
+    <>
       {!session ? (
         <Auth />
       ) : (
         <>
-          <div className={!accountOpen ? 'hidden' : null}>
+          {/* <div className={!accountOpen ? 'hidden' : null}>
             <Account key={session.user.id} session={session} />
-          </div>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'max(20vw, 16rem) auto',
-            }}
-          >
-            <div className='inline col-start-1 row-start-1'>
+          </div> */}
+          <main>
+            {/* <div className='inline col-start-1 row-start-1'>
               <Hamburger toggled={accountOpen} toggle={setAccountOpen} />
-            </div>
+            </div> */}
             <Routes>
               <Route
                 path='/'
                 element={
                   <Suspense fallback={<Loader />}>
                     <ViewOwnFeeds
+                      session={session}
+                      username={username}
+                      avatar={avatar_url}
                       accountOpen={accountOpen}
                       getFeeds={getFeeds}
                       feeds={feeds}
@@ -97,7 +130,9 @@ function App() {
                 element={
                   <Suspense fallback={<Loader />}>
                     <ViewMostRecent
-                      accountOpen={accountOpen}
+                      session={session}
+                      avatar={avatar_url}
+                      username={username}
                       getFeeds={getFeeds}
                       feeds={feeds}
                     />
@@ -109,7 +144,20 @@ function App() {
                 element={
                   <Suspense fallback={<Loader />}>
                     <ViewFeed
-                      accountOpen={accountOpen}
+                      session={session}
+                      avatar={avatar_url}
+                      addParsedFeed={addParsedFeed}
+                      getFeeds={getFeeds}
+                    />
+                  </Suspense>
+                }
+              />
+              <Route
+                path='/account'
+                element={
+                  <Suspense fallback={<Loader />}>
+                    <Account
+                      session={session}
                       addParsedFeed={addParsedFeed}
                       getFeeds={getFeeds}
                     />
@@ -117,10 +165,10 @@ function App() {
                 }
               />
             </Routes>
-          </div>
+          </main>
         </>
       )}
-    </div>
+    </>
   )
 }
 
