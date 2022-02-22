@@ -16,6 +16,12 @@ const ViewOwnFeeds = ({ session, username, avatar, getFeeds, feeds }) => {
 
   const onToggleAccount = () => {
     setShowAccount(!showAccount)
+    if (showAccount) {
+      document.querySelector('body').classList.remove('overflow-hidden')
+    }
+    if (!showAccount) {
+      document.querySelector('body').classList.add('overflow-hidden')
+    }
   }
 
   return (
@@ -42,7 +48,11 @@ const ViewOwnFeeds = ({ session, username, avatar, getFeeds, feeds }) => {
         ) : null}
       </Menu>
       {showAccount ? (
-        <Account setShowAccount={setShowAccount} session={session} />
+        <Account
+          showAccount={showAccount}
+          setShowAccount={setShowAccount}
+          session={session}
+        />
       ) : null}
       <div className='container'>
         <div>

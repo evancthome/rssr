@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../supabaseClient'
 import Avatar from './Avatar'
 
-const Account = ({ session, setShowAccount }) => {
+const Account = ({ session, showAccount, setShowAccount }) => {
   const [username, setUsername] = useState(null)
   const [website, setWebsite] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -72,17 +72,21 @@ const Account = ({ session, setShowAccount }) => {
     }
   }
 
+  const onToggleAccount = () => {
+    if (showAccount) {
+      document.querySelector('body').classList.remove('overflow-hidden')
+    }
+    if (!showAccount) {
+      document.querySelector('body').classList.add('overflow-hidden')
+    }
+    setShowAccount(!showAccount)
+  }
+
   return (
     <div>
       <div className='account modal'>
         <h1>RSSr</h1>
-        <span
-          onClick={() => {
-            setShowAccount(false)
-          }}
-        >
-          x
-        </span>
+        <span onClick={onToggleAccount}>x</span>
         <Avatar
           url={avatar_url}
           onUpload={(url) => {

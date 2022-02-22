@@ -79,7 +79,7 @@
   transform: translateX(-50%);
   border-radius: 0.5em;
   box-shadow: var(--box-shadow);
-  z-index: 1000;
+  z-index: 2000;
 }
 .modal-content {
   margin-bottom: 1rem;

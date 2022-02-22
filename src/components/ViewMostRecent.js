@@ -34,6 +34,12 @@ const ViewMostRecent = ({ session, username, avatar, getFeeds, feeds }) => {
   }
 
   const onToggleAccount = () => {
+    if (showAccount) {
+      document.querySelector('body').classList.remove('overflow-hidden')
+    }
+    if (!showAccount) {
+      document.querySelector('body').classList.add('overflow-hidden')
+    }
     setShowAccount(!showAccount)
   }
 
@@ -61,7 +67,11 @@ const ViewMostRecent = ({ session, username, avatar, getFeeds, feeds }) => {
           </Link>
         </div>
         {showAccount ? (
-          <Account setShowAccount={setShowAccount} session={session} />
+          <Account
+            showAccount={showAccount}
+            setShowAccount={setShowAccount}
+            session={session}
+          />
         ) : null}
         <div className='view-feed'>
           {firstFew.map((i, j) => (

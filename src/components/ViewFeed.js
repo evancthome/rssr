@@ -95,6 +95,12 @@ const ViewFeed = ({ session, username, avatar, getFeeds, addParsedFeed }) => {
   }
 
   const onToggleAccount = () => {
+    if (showAccount) {
+      document.querySelector('body').classList.remove('overflow-hidden')
+    }
+    if (!showAccount) {
+      document.querySelector('body').classList.add('overflow-hidden')
+    }
     setShowAccount(!showAccount)
   }
 
@@ -137,7 +143,11 @@ const ViewFeed = ({ session, username, avatar, getFeeds, addParsedFeed }) => {
         ) : null}
       </Menu>
       {showAccount ? (
-        <Account setShowAccount={setShowAccount} session={session} />
+        <Account
+          showAccount={showAccount}
+          setShowAccount={setShowAccount}
+          session={session}
+        />
       ) : null}
       <div className='container'>
         <div className='header'>
